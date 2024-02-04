@@ -1,52 +1,24 @@
 import * as React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Text, View, Image, StyleSheet, Platform } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../../styles';
-
 import tabNavigationData from './tabNavigationData';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function BottomTabs() {
+export default function AppNavigator() {
   return (
-    <Tab.Navigator tabBarOptions={{style: {height: Platform.OS === 'ios' ? 90 : 50}}}>
+    <Stack.Navigator>
       {tabNavigationData.map((item, idx) => (
-        <Tab.Screen 
+        <Stack.Screen 
           key={`tab_item${idx+1}`}
           name={item.name}
           component={item.component}
           options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={styles.tabBarItemContainer}>
-              <Image
-                resizeMode="contain"
-                source={item.icon}
-                style={[styles.tabBarIcon, focused && styles.tabBarIconFocused]}
-              />
-            </View>
-          ),
-          tabBarLabel: ({ focused }) => <Text style={{ fontSize: 12, color: focused ? colors.primary : colors.gray }}>{item.name}</Text>,
-        }}
-        />        
+            headerShown: false, // Optional: Hide the header if you don't need it
+          }}
+        />
       ))}
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
-};
-
-const styles = StyleSheet.create({
-  tabBarItemContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.white,
-    paddingHorizontal: 10,
-    bottom: Platform.OS === 'ios' ? -5 : 0,
-  },
-  tabBarIcon: {
-    width: 23,
-    height: 23,
-  },
-  tabBarIconFocused: {
-    tintColor: colors.primary,
-  },
-});
+}

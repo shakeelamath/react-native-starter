@@ -1,13 +1,30 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { ScrollView } from 'react-native-gesture-handler';
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const initialRegion = {
     latitude: 37.78825,
     longitude: -122.4324,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
+  };
+
+  const [tabHeight, setTabHeight] = useState(new Animated.Value(300));
+
+  const toggleTabHeight = () => {
+    const newHeight = tabHeight._value === 300 ? 600 : 300;
+    Animated.timing(tabHeight, {
+      toValue: newHeight,
+      duration: 500,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const tabStyle = {
+    height: tabHeight,
   };
 
   return (
@@ -16,8 +33,7 @@ export default function HomeScreen() {
       <MapView
         style={styles.map}
         initialRegion={initialRegion}
-        AIzaSyCCf_z6b4SXKfHRagYhC4GHUX2SWzX7M8s
-        provider="google" // Add this line for using Google Maps
+        provider="google"
         customMapStyle={[]}
         showsUserLocation={true}
         showsMyLocationButton={true}
@@ -25,17 +41,26 @@ export default function HomeScreen() {
         toolbarEnabled={true}
         zoomControlEnabled={true}
         rotateEnabled={true}
-        // Replace "YOUR_API_KEY" with your actual API key
         mapType="standard"
-        //customMapStyle={[]}
-        onMapReady={() => {}} // Optional: Add any additional props or event handlers
+        onMapReady={() => {}}
       >
         {/* Marker for the initial location */}
         <Marker coordinate={initialRegion} title="Marker Title" description="Marker Description" />
       </MapView>
+
+      {/* Animated Bottom Tab */}
+      <Animated.View style={[styles.bottomTab, tabStyle]}>
+        <TouchableOpacity onPress={toggleTabHeight}>
+          <Text>Events Near Me</Text>
+        </TouchableOpacity>
+        {/* Add your tab content here */}
+        <ScrollView>
+          {/* Your tab content goes here */}
+        </ScrollView>
+      </Animated.View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -46,4 +71,15 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  bottomTab: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: 'gray',
+  },
 });
+
+export default HomeScreen;
