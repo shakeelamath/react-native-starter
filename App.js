@@ -31,6 +31,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    overflow: 'hidden',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

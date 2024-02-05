@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/drawer';
 import NavigatorView from './RootNavigation';
 
-import AvailableInFullVersion from '../../modules/availableInFullVersion/AvailableInFullVersionViewContainer';
+import AvailableInFullVersion from '../login/LoginViewContainer';
 
 const iconHome = require('../../../assets/images/drawer/home.png');
 const iconCalendar = require('../../../assets/images/drawer/calendar.png');
@@ -107,7 +107,7 @@ export default function App() {
   return (
     <Drawer.Navigator
       drawerStyle={{
-        backgroundColor: '#3C38B1',
+        backgroundColor: '#1a1a1a',
       }}
       drawerContent={props => <CustomDrawerContent {...props} />}
     >
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   divider: {
-    borderBottomColor: 'white',
+    borderBottomColor: 'grey',
     opacity: 0.2,
     borderBottomWidth: 1,
     margin: 15,

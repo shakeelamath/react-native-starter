@@ -3,7 +3,7 @@ import { TouchableOpacity, Image } from 'react-native';
 
 import TabNavigator from './MainTabNavigator';
 import GalleryScreen from '../gallery/GalleryViewContainer';
-import AvailableInFullVersion from '../../modules/availableInFullVersion/AvailableInFullVersionViewContainer';
+import AvailableInFullVersion from '../login/LoginViewContainer';
 
 // import ProfileScreen from '../profile/ProfileViewContainer';
 // import ArticleScreen from '../article/ArticleViewContainer';
@@ -34,12 +34,12 @@ const headerLeftComponent = (props) => {
   )
 }
 
-const headerBackground = require('../../../assets/images/topBarBg.png');
-
+const headerBackground = { backgroundColor: 'transparent' };
 const StackNavigationData = [
   {
     name: 'SyncUp',
     component: TabNavigator,
+    headerLeft: headerLeftComponent,
     headerLeft: null,
     headerBackground: { source: headerBackground },
     headerTitleStyle: {

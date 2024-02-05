@@ -15,6 +15,7 @@ export default function AppNavigator() {
           name={item.name}
           component={item.component}
           options={{
+            
             headerShown: false, // Optional: Hide the header if you don't need it
           }}
         />

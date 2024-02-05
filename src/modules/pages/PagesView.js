@@ -106,7 +106,7 @@ export default function PagesScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: '#1a1a1a',
     paddingTop: 10,
   },
   row: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 120,
     paddingVertical: 20,
-    borderColor: colors.primaryLight,
+    borderColor: '#1a1a1a',
     borderWidth: 1,
     borderRadius: 5,
     alignItems: 'center',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     width: '31%',
     height: 120,
     paddingVertical: 20,
-    borderColor: colors.primaryLight,
+    borderColor: '#1a1a1a',
     borderWidth: 1,
     borderRadius: 5,
     alignItems: 'center',
