@@ -145,7 +145,6 @@ const HomeScreen = () => {
       <MapView
         style={styles.map}
         initialRegion={initialRegion}
-        
         provider="google"
         customMapStyle={customMapStyle}
         showsUserLocation={true}
