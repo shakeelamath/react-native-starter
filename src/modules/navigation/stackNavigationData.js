@@ -38,13 +38,13 @@ const headerBackground = { backgroundColor: 'transparent' };
 const StackNavigationData = [
   {
     name: 'SyncUp',
-    component: TabNavigator,
+        component: TabNavigator,
     headerLeft: headerLeftComponent,
     headerLeft: null,
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -55,7 +55,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -66,7 +66,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -77,7 +77,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -88,7 +88,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -99,7 +99,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -110,7 +110,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -121,7 +121,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },
@@ -132,7 +132,7 @@ const StackNavigationData = [
     headerBackground: { source: headerBackground },
     headerTitleStyle: {
       fontFamily: fonts.primaryRegular,
-      color: colors.white,
+      color: 'transparent',
       fontSize: 18,
     },
   },

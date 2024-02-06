@@ -34,9 +34,7 @@ const NavigatorView = (props) => {
           component={item.component} 
           options={{
             headerLeft: item.headerLeft || headerLeftComponentMenu,
-            headerBackground: () => (
-              <View style={styles.headerBackground} />
-            ),
+            headerTransparent:true,
             headerTitleStyle: item.headerTitleStyle,
           }} 
         />
