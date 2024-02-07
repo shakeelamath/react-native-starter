@@ -25,7 +25,12 @@ export default function App() {
           }
           persistor={persistor}
         >
-          <Stack.Navigator initialRouteName="AvailableInFullVersionScreen">
+          <Stack.Navigator initialRouteName="AvailableInFullVersionScreen"
+            screenOptions={{
+              headerTransparent: true,
+              headerTitle: '', // Hide the title
+            }}
+          >
             <Stack.Screen name="AvailableInFullVersionScreen" component={AvailableInFullVersionScreen} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             {/* Add other screens as needed */}

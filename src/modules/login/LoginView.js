@@ -1,30 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Linking } from 'react-native';
-import { GoogleSignin,statusCodes } from '@react-native-google-signin/google-signin';
-import GoogleAuthProvider from '@react-native-firebase/auth';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleAuthProvider } from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth'; 
 import { fonts, colors } from '../../styles';
 import { Button } from '../../components';
 
 export default function AvailableInFullVersionScreen(props) {
   const rnsUrl = 'https://reactnativestarter.com';
-  const handleClick = () => {
-    Linking.canOpenURL(rnsUrl).then(supported => {
-      if (supported) {
-        Linking.openURL(rnsUrl);
-      } else {
-        console.log(`Don't know how to open URI: ${rnsUrl}`);
-      }
-    });
-  };
 
   const [selectedRole, setSelectedRole] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   GoogleSignin.configure({
-    webClientId: '561706331753-alh01qme45ivb56ih0mltu6mrehjuvdi.apps.googleusercontent.com',
+    webClientId: '561706331753-jvgchmrcr3ul6js8hs6i5bpgseqbm6o1.apps.googleusercontent.com',
   });
-  // Initialize Google Sign-In configuration
+
   const handleGoogleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -46,6 +37,7 @@ export default function AvailableInFullVersionScreen(props) {
       }
     }
   };
+
   const handleRoleSelection = (role) => {
     setSelectedRole(role);
   };
@@ -119,7 +111,6 @@ export default function AvailableInFullVersionScreen(props) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
