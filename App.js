@@ -3,11 +3,15 @@ import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { colors } from './src/styles';
 
 import { store, persistor } from './src/redux/store';
 
-import AppView from './src/modules/AppViewContainer';
+import AvailableInFullVersionScreen from './src/modules/login/LoginView';
+import HomeScreen from './src/modules/home/HomeView';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
@@ -15,14 +19,17 @@ export default function App() {
       <NavigationContainer>
         <PersistGate
           loading={
-            // eslint-disable-next-line react/jsx-wrap-multilines
             <View style={styles.container}>
               <ActivityIndicator color={colors.red} />
             </View>
           }
           persistor={persistor}
         >
-          <AppView />
+          <Stack.Navigator initialRouteName="AvailableInFullVersionScreen">
+            <Stack.Screen name="AvailableInFullVersionScreen" component={AvailableInFullVersionScreen} />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            {/* Add other screens as needed */}
+          </Stack.Navigator>
         </PersistGate>
       </NavigationContainer>
     </Provider>

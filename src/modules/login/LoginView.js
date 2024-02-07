@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
-
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Linking } from 'react-native';
+import { GoogleSignin,statusCodes } from '@react-native-google-signin/google-signin';
+import GoogleAuthProvider from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth'; 
 import { fonts, colors } from '../../styles';
 import { Button } from '../../components';
 
@@ -27,37 +21,49 @@ export default function AvailableInFullVersionScreen(props) {
   const [selectedRole, setSelectedRole] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  GoogleSignin.configure({
+    webClientId: '561706331753-alh01qme45ivb56ih0mltu6mrehjuvdi.apps.googleusercontent.com',
+  });
+  // Initialize Google Sign-In configuration
+  const handleGoogleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      await auth().signInWithCredential(googleCredential);
+
+      // Navigate to HomeScreen upon successful sign-in
+      props.navigation.navigate('HomeScreen');
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('Google Sign-In cancelled');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('Google Sign-In in progress');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('Play services not available or outdated');
+      } else {
+        console.error('Google Sign-In Error:', error);
+      }
+    }
+  };
   const handleRoleSelection = (role) => {
     setSelectedRole(role);
   };
 
   const renderRoleButton = (role, label) => (
     <TouchableOpacity
-    style={[
-      styles.roleButton,
-      selectedRole === role && styles.selectedRole,
-    ]}
-    onPress={() => handleRoleSelection(role)}
-  >
-    <Text
-      style={[
-        styles.roleButtonText,
-        selectedRole === role && styles.selectedRoleText,
-      ]}
+      style={[styles.roleButton, selectedRole === role && styles.selectedRole]}
+      onPress={() => handleRoleSelection(role)}
     >
-      {label}
-    </Text>
-  </TouchableOpacity>
+      <Text style={[styles.roleButtonText, selectedRole === role && styles.selectedRoleText]}>
+        {label}
+      </Text>
+    </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../../assets/images/syncupLogo.png')}
-        style={styles.nerdImage}
-      />
-
-      
+      <Image source={require('../../../assets/images/syncupLogo.png')} style={styles.nerdImage} />
 
       <View style={styles.roleContainer}>
         {renderRoleButton('vendor', 'Vendor')}
@@ -98,6 +104,16 @@ export default function AvailableInFullVersionScreen(props) {
           style={styles.button}
           caption="Later"
           onPress={() => props.navigation.goBack()}
+        />
+
+        {/* Google Sign-In button */}
+        <Button
+          large
+          secondary
+          rounded
+          style={styles.button}
+          caption="Sign In with Google"
+          onPress={handleGoogleSignIn}
         />
       </View>
     </View>
