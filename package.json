@@ -19,7 +19,7 @@
     "e2e:test": "detox test --configuration ios.sim.debug"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.19.0",
+    "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-community/cli": "^4.10.1",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-native-community/toolbar-android": "^0.2.1",
@@ -53,7 +53,7 @@
     "react-native-screens": "^2.5.0",
     "react-native-ui-lib": "^3.39.0",
     "react-native-vector-icons": "^10.0.3",
-    "react-redux": "^6.0.1",
+    "react-redux": "^9.1.0",
     "recompose": "^0.30.0",
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",

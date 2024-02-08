@@ -139,6 +139,7 @@ const HomeScreen = () => {
       ]
     }
   ];
+  
   return (
     <View style={styles.container}>
       {/* Google Map */}
@@ -167,17 +168,27 @@ const HomeScreen = () => {
             source={require('../../../assets/images/icons/arrowupwhite.png')}
             style={[styles.arrowIcon, { transform: [{ rotate: rotateArrow }] }]}
           />
-          <Text style={styles.tabHeaderText}>Events Near Me</Text>
+          <Text style={styles.tabHeaderText}>Events Happening Near You</Text>
         </TouchableOpacity>
+        <View style={styles.viewflat}>
         <FlatList
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           horizontal
+          style={styles.flatList}
         />
+        </View>
         {/* Add your tab content here */}
-        <ScrollView>
-          {/* Your tab content goes here */}
+        <ScrollView style={styles.scrollView}>
+        <View style={styles.tabContent}>
+        <Text style={styles.tabContentHeading}>Genres</Text>
+    <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
+    <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
+    <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
+    <Text style={styles.cantFindText}>Can't find what you're looking for?{'\n'}<Text style={styles.exploreMoreText}>Explore More</Text></Text>
+    
+    </View>
         </ScrollView>
       </Animated.View>
     </View>
@@ -191,6 +202,37 @@ const styles = StyleSheet.create({
     
     justifyContent: 'flex-end', 
   },
+  viewflat:{
+height:180,
+  },
+  tabContent: {
+    marginTop:0,
+    padding: 0,
+    paddingTop:0,
+    alignItems: 'center',
+    marginBottom: 0,
+    alignSelf: 'flex-start',
+  },
+  tabContentHeading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+  },
+  cantFindText:{
+    color: 'white',
+    marginBottom: 20,
+    marginTop:-10,
+    textAlign:'center',
+    padding:20,
+  },
+  exploreMoreText:{
+    color:'red',
+    alignItems: 'center',
+    textAlign:'center',
+
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
     flex: 1, 
@@ -201,11 +243,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: '#1a1a1a',
-    borderTopWidth: 1,
+    borderTopWidth: 0,
     borderTopColor: 'gray',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     alignItems: 'center',
+    
   },
   tabHeader: {
     flexDirection: 'column',
@@ -214,10 +257,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   tabHeaderText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: 'white', 
     marginTop: 5,
+    alignSelf: 'flex-start',
+    
+    marginEnd:65,
   },
   arrowIcon: {
     width: 20,
@@ -239,6 +285,7 @@ const styles = StyleSheet.create({
   gridText: {
     fontSize: 17,
     marginTop: 5,
+    
     color: 'white',
     fontWeight: 'bold',
     textAlign:'left',
@@ -248,10 +295,24 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: 'red',
     alignSelf: 'flex-start', 
+    marginBottom:0,
     
-    
-    fontSize: 13, // Adjust the font size as needed
+    fontSize: 13,
+     // Adjust the font size as needed
   },
+  additionalImage: {
+   
+    marginBottom:25,
+    marginRight:20,
+    alignSelf: 'flex-start', 
+  },
+  flatList: {
+   
+    zIndex:1,
+    overflow:'hidden',
+  },
+
+  
 
 });
 

@@ -1,40 +1,60 @@
 import { Provider } from 'react-redux';
-import React from 'react';
+import React, {useState, useEffect}from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { colors } from './src/styles';
 
 import { store, persistor } from './src/redux/store';
 
-import AvailableInFullVersionScreen from './src/modules/login/LoginView';
-import HomeScreen from './src/modules/home/HomeView';
-
-const Stack = createStackNavigator();
-
+import AppView from './src/modules/AppViewContainer';
+import { firebase } from '@react-native-firebase/app';
 export default function App() {
+  const [firebaseInitialized, setFirebaseInitialized] = useState(false);
+
+  useEffect(() => {
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: 'AIzaSyClBHN0TZmD2YzVR2ciJKrxpbJcZ6kP-BM',
+      authDomain: 'localhost',
+      projectId: 'syncup-c2f1d',
+      storageBucket: 'syncup-c2f1d.appspot.com',
+      messagingSenderId: '561706331753',
+      appId: '1:561706331753:android:367cc0fe204905c3ab7c',
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+      console.log('hi');
+    }
+
+    // Set the initialization state to true
+    setFirebaseInitialized(true);
+  }, []);
+  if (!firebaseInitialized) {
+    // Wait for Firebase initialization
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator color={colors.red} />
+      </View>
+    );
+  }
+
+
+ 
   return (
     <Provider store={store}>
       <NavigationContainer>
         <PersistGate
           loading={
+            // eslint-disable-next-line react/jsx-wrap-multilines
             <View style={styles.container}>
               <ActivityIndicator color={colors.red} />
             </View>
           }
           persistor={persistor}
         >
-          <Stack.Navigator initialRouteName="AvailableInFullVersionScreen"
-            screenOptions={{
-              headerTransparent: true,
-              headerTitle: '', // Hide the title
-            }}
-          >
-            <Stack.Screen name="AvailableInFullVersionScreen" component={AvailableInFullVersionScreen} />
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            {/* Add other screens as needed */}
-          </Stack.Navigator>
+          <AppView />
         </PersistGate>
       </NavigationContainer>
     </Provider>
@@ -43,7 +63,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    overflow: 'hidden',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

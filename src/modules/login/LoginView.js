@@ -5,6 +5,8 @@ import { GoogleAuthProvider } from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth'; 
 import { fonts, colors } from '../../styles';
 import { Button } from '../../components';
+import { dispatch, useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/actions';
 
 export default function AvailableInFullVersionScreen(props) {
   const rnsUrl = 'https://reactnativestarter.com';
@@ -12,6 +14,7 @@ export default function AvailableInFullVersionScreen(props) {
   const [selectedRole, setSelectedRole] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
   GoogleSignin.configure({
     webClientId: '561706331753-jvgchmrcr3ul6js8hs6i5bpgseqbm6o1.apps.googleusercontent.com',
   });
@@ -22,9 +25,10 @@ export default function AvailableInFullVersionScreen(props) {
       const { idToken } = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       await auth().signInWithCredential(googleCredential);
-
+      console.log('Navigating to SyncUp screen');
+      dispatch(loginSuccess());
       // Navigate to HomeScreen upon successful sign-in
-      props.navigation.navigate('HomeScreen');
+      props.navigation.navigate('SyncUp');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('Google Sign-In cancelled');
