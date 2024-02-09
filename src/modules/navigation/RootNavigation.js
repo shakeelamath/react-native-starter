@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-
-import StackNavigationData from './stackNavigationData';
-
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import LoginViewContainer from '../login/LoginViewContainer';
+import HomeScreen from '../home/HomeView';
+import { useNavigation } from '@react-navigation/native'; 
 const Stack = createStackNavigator();
+import { initializeApp } from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth'; 
+const NavigatorView = () => {
+  const navigation = useNavigation();
 
-const NavigatorView = (props) => {
+  useEffect(() => {
+    // Check if the user is authenticated
+    const user = auth().currentUser;
+
+    if (user) {
+      // If authenticated, navigate to "SyncUp" screen
+      navigation.navigate('Login');
+    }
+  }, []);
+
   const headerLeftComponentMenu = () => (
     <TouchableOpacity
-      onPress={() => props.navigation.toggleDrawer()}
+      onPress={() => navigation.toggleDrawer()}
       style={{
         paddingHorizontal: 16,
         paddingVertical: 12,
@@ -27,18 +40,22 @@ const NavigatorView = (props) => {
 
   return (
     <Stack.Navigator>
-      {StackNavigationData.map((item, idx) => (
-        <Stack.Screen
-          key={`stack_item-${idx+1}`}
-          name={item.name} 
-          component={item.component} 
-          options={{
-            headerLeft: item.headerLeft || headerLeftComponentMenu,
-            headerTransparent:true,
-            headerTitleStyle: item.headerTitleStyle,
-          }} 
-        />
-      ))}
+      <Stack.Screen
+        name="SyncUp"
+        component={HomeScreen}
+        options={{
+          headerTransparent: true,
+          headerLeft: headerLeftComponentMenu,
+          headerTitleStyle: {
+            color: 'transparent',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginViewContainer}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -46,8 +63,7 @@ const NavigatorView = (props) => {
 const styles = StyleSheet.create({
   headerBackground: {
     backgroundColor: '#1a1a1a',
-    
-    flex: 1, // Ensure the header background takes the full space
+    flex: -1,
   },
 });
 

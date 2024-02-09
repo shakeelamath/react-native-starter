@@ -1,23 +1,33 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Text, View, Image, StyleSheet, Platform } from 'react-native';
-import { colors } from '../../styles';
+import { useSelector } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
 
-import tabNavigationData from './tabNavigationData';
-import { useSelector } from 'react-redux'; // Import the useSelector hook
 import HomeScreen from '../home/HomeView';
-import LoginViewContainer from '../login/LoginViewContainer';
+import LoginViewContainer from '../login/LoginView';
 
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
-  const [initialRoute, setInitialRoute] = React.useState('Login');
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
-    <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginViewContainer} />
-
-       <Stack.Screen name="SyncUp" component={HomeScreen} />
-    </Stack.Navigator>
+    
+      <Stack.Navigator
+        initialRouteName={isAuthenticated ? 'SyncUp' : 'Login'}
+        
+      >
+        <Stack.Screen
+        name="Login"
+        component={LoginViewContainer}
+        options={{
+          header: () => null,
+          headerLeft: null, // Hide the header left component
+          headerLeftContainerStyle: { display: 'none' }, // Additional style to hide the container
+        }}
+      />
+        <Stack.Screen name="SyncUp" component={HomeScreen} />
+      </Stack.Navigator>
+    
   );
 }
