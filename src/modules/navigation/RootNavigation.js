@@ -11,14 +11,19 @@ const NavigatorView = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Check if the user is authenticated
-    const user = auth().currentUser;
+    const unsubscribe = auth().onAuthStateChanged((user) => {
+      if (user) {
+        // If authenticated, navigate to "SyncUp" screen
+        navigation.navigate('SyncUp');
+      } else {
+        // If not authenticated, stay on the "Login" screen
+        navigation.navigate('Login');
+      }
+    });
 
-    if (user) {
-      // If authenticated, navigate to "SyncUp" screen
-      navigation.navigate('Login');
-    }
-  }, []);
+    // Cleanup the subscription when the component unmounts
+    return () => unsubscribe();
+  }, [navigation]);
 
   const headerLeftComponentMenu = () => (
     <TouchableOpacity
@@ -41,6 +46,11 @@ const NavigatorView = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="Login"
+        component={LoginViewContainer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="SyncUp"
         component={HomeScreen}
         options={{
@@ -51,20 +61,8 @@ const NavigatorView = () => {
           },
         }}
       />
-      <Stack.Screen
-        name="Login"
-        component={LoginViewContainer}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  headerBackground: {
-    backgroundColor: '#1a1a1a',
-    flex: -1,
-  },
-});
 
 export default NavigatorView;

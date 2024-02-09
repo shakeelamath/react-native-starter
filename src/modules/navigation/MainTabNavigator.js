@@ -1,33 +1,32 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import { NavigationContainer } from '@react-navigation/native';
-
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import HomeScreen from '../home/HomeView';
-import LoginViewContainer from '../login/LoginView';
-
+import LoginViewContainer from '../login/LoginViewContainer';
+import Pages from '../pages/PagesView';
+import { loginSuccess } from '../../redux/actions';
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
+
+
   return (
-    
-      <Stack.Navigator
-        initialRouteName={isAuthenticated ? 'SyncUp' : 'Login'}
-        
-      >
-        <Stack.Screen
-        name="Login"
-        component={LoginViewContainer}
-        options={{
-          header: () => null,
-          headerLeft: null, // Hide the header left component
-          headerLeftContainerStyle: { display: 'none' }, // Additional style to hide the container
-        }}
-      />
-        <Stack.Screen name="SyncUp" component={HomeScreen} />
-      </Stack.Navigator>
-    
+    <Stack.Navigator initialRouteName={initialRoute}>
+      <Stack.Screen name="Login" component={LoginViewContainer} options={{ headerShown: false }} />
+      <Stack.Screen name="SyncUp" component={HomeScreen} />
+      <Stack.Screen name="Pages" component={Pages} />
+    </Stack.Navigator>
   );
 }
+
+// Add a LoadingScreen component if needed
+const LoadingScreen = () => {
+  return (
+    // Your loading UI, e.g., a spinner or a splash screen
+    <YourLoadingComponent />
+  );
+};
