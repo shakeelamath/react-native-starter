@@ -4,6 +4,7 @@ import { TouchableOpacity, Image } from 'react-native';
 import TabNavigator from './MainTabNavigator';
 import GalleryScreen from '../gallery/GalleryViewContainer';
 import AvailableInFullVersion from '../login/LoginViewContainer';
+import Artist from '../artistpage/ArtistViewContainer';
 
 // import ProfileScreen from '../profile/ProfileViewContainer';
 // import ArticleScreen from '../article/ArticleViewContainer';
@@ -13,6 +14,8 @@ import AvailableInFullVersion from '../login/LoginViewContainer';
 // import AuthScreen from '../auth/AuthViewContainer';
 
 import { colors, fonts } from '../../styles';
+import ArtistScreen from '../artistpage/ArtistView';
+import HomeScreen from '../home/HomeView';
 
 const headerLeftComponent = (props) => {
   return (
@@ -37,8 +40,8 @@ const headerLeftComponent = (props) => {
 const headerBackground = { backgroundColor: 'transparent' };
 const StackNavigationData = [
   {
-    name: 'SyncUp',
-        component: TabNavigator,
+    name: 'Home',
+        component: HomeScreen,
     headerLeft: headerLeftComponent,
     headerLeft: null,
     headerBackground: { source: headerBackground },
@@ -128,6 +131,17 @@ const StackNavigationData = [
   {
     name: 'Auth',
     component: AvailableInFullVersion,
+    headerLeft: headerLeftComponent,
+    headerBackground: { source: headerBackground },
+    headerTitleStyle: {
+      fontFamily: fonts.primaryRegular,
+      color: 'transparent',
+      fontSize: 18,
+    },
+  },
+  {
+    name: 'Artist',
+    component: ArtistScreen,
     headerLeft: headerLeftComponent,
     headerBackground: { source: headerBackground },
     headerTitleStyle: {

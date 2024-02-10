@@ -28,7 +28,7 @@ export default function AvailableInFullVersionScreen(props) {
       console.log('Navigating to SyncUp screen');
       dispatch(loginSuccess());
       // Navigate to HomeScreen upon successful sign-in
-      props.navigation.navigate('SyncUp');
+      props.navigation.navigate('Home');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('Google Sign-In cancelled');

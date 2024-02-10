@@ -38,6 +38,10 @@ const drawerData = [
     name: 'Components',
     icon: iconComponents,
   },
+  {
+    name: 'Artist',
+    icon: iconComponents,
+  },
 ];
 
 const Drawer = createDrawerNavigator();

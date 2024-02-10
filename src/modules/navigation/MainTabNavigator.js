@@ -6,6 +6,7 @@ import HomeScreen from '../home/HomeView';
 import LoginViewContainer from '../login/LoginViewContainer';
 import Pages from '../pages/PagesView';
 import { loginSuccess } from '../../redux/actions';
+import Artist from '../artistpage/ArtistViewContainer'
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
@@ -17,8 +18,9 @@ export default function AppNavigator() {
   return (
     <Stack.Navigator initialRouteName={initialRoute}>
       <Stack.Screen name="Login" component={LoginViewContainer} options={{ headerShown: false }} />
-      <Stack.Screen name="SyncUp" component={HomeScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Pages" component={Pages} />
+      <Stack.Screen name="Artist" component={Artist} />
     </Stack.Navigator>
   );
 }

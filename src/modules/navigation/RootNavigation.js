@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import LoginViewContainer from '../login/LoginViewContainer';
-import HomeScreen from '../home/HomeView';
+import HomeScreen from '../home/HomeViewContainer';
 import { useNavigation } from '@react-navigation/native'; 
 const Stack = createStackNavigator();
 import { initializeApp } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth'; 
+import ArtistScreen from '../artistpage/ArtistView';
+import pages from '../pages/PagesViewContainer'
 const NavigatorView = () => {
   const navigation = useNavigation();
 
@@ -14,7 +16,7 @@ const NavigatorView = () => {
     const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
         // If authenticated, navigate to "SyncUp" screen
-        navigation.navigate('SyncUp');
+        navigation.navigate('Home');
       } else {
         // If not authenticated, stay on the "Login" screen
         navigation.navigate('Login');
@@ -51,8 +53,30 @@ const NavigatorView = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="SyncUp"
+        name="Home"
         component={HomeScreen}
+        options={{
+          headerTransparent: true,
+          headerLeft: headerLeftComponentMenu,
+          headerTitleStyle: {
+            color: 'transparent',
+          },
+        }}
+      />
+       <Stack.Screen
+        name="Artist"
+        component={ArtistScreen}
+        options={{
+          headerTransparent: true,
+          headerLeft: headerLeftComponentMenu,
+          headerTitleStyle: {
+            color: 'transparent',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Pages"
+        component={pages}
         options={{
           headerTransparent: true,
           headerLeft: headerLeftComponentMenu,
