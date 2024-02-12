@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, FlatList, ImageBackground } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import * as Animatable from 'react-native-animatable';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import Reviews from './reviews'; 
 export default function ArtistScreen() {
   const artistProfileImageUrl = 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/ArtistImage.png?alt=media&token=4a0fcfd4-4194-485a-9bad-7eca3cd57d1a';
 
   const [rating, setRating] = useState(0);
   const [animateStars, setAnimateStars] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedSection, setSelectedSection] = useState('Events');
+  const eventImages = [
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/eventbg.png?alt=media&token=24f446fc-672c-4ce7-ad88-e6c89c723cad', title: 'Love Bar',date: '2024-03-15' },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/eventbg.png?alt=media&token=24f446fc-672c-4ce7-ad88-e6c89c723cad', title: 'Industri',date: '2024-03-16'  },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/eventbg.png?alt=media&token=24f446fc-672c-4ce7-ad88-e6c89c723cad', title: 'RnB',date: '2024-03-17'  },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/eventbg.png?alt=media&token=24f446fc-672c-4ce7-ad88-e6c89c723cad', title: 'Sunset Blu',date: '2024-03-18'  },
 
+
+    // Add more objects with different image URLs and titles
+  ];
+
+  const photoImages = [
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 1' },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 2' },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 3' },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 4' },
+        { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 3' },
+    { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 4' },
+    // Add more objects with different image URLs and names
+  ];
   useEffect(() => {
     setAnimateStars(true);
   }, []);
 
-  const handleRating = (newRating) => {
-    // Handle the rating as needed (e.g., send it to the server)
-    setRating(newRating);
-  };
+
 
   const sections = ['Events', 'Photos', 'Reviews'];
 
@@ -34,33 +49,19 @@ export default function ArtistScreen() {
       <View style={styles.statsContainer}>
         {/* Ratings */}
         <View style={styles.statItem}>
+        <Text style={styles.statValue}>9.5</Text>
           <Text style={styles.statTitle}>Ratings</Text>
-          <Text style={styles.statValue}>9.5</Text>
         </View>
 
         {/* Events Performed */}
         <View style={styles.statItem}>
+        <Text style={styles.statValue}>25</Text>
           <Text style={styles.statTitle}>Events Performed</Text>
-          <Text style={styles.statValue}>25</Text>
         </View>
       </View>
 
       {/* 5-Star Rating System with Animation */}
-      <Animatable.View
-        animation={animateStars ? 'bounceIn' : undefined}
-        duration={2000}
-        style={styles.ratingContainer}
-      >
-        <AirbnbRating
-          showRating={false}
-          count={5}
-          defaultRating={rating}
-          size={20} // Adjust the size of the stars
-          starContainerStyle={{ flexDirection: 'row', justifyContent: 'space-between' }} // Space out the stars
-          starStyle={{ marginHorizontal: 5 }} // Adjust the horizontal margin between stars
-          onFinishRating={handleRating}
-        />
-      </Animatable.View>
+     
 
       {/* Blackish transparent background for text */}
       <View style={styles.textContainer}>
@@ -98,25 +99,53 @@ export default function ArtistScreen() {
 
       {/* Your content for the selected section goes here */}
       {selectedSection === 'Events' && (
-        <View style={styles.dropdownContent}>
-          {/* Content for Event section */}
-          <Text>Event Section Content</Text>
+        <ScrollView style={styles.scrollableContent}>
+          <View style={styles.dropdownContent}>
+            {/* Content for Event section */}
+
+            {/* Vertical list of images with text and calendar icon */}
+            <FlatList
+  data={eventImages}
+  keyExtractor={(item, index) => index.toString()}
+  renderItem={({ item }) => (
+    <ImageBackground source={{ uri: item.image }} style={styles.eventImage} resizeMode="cover">
+      <View style={styles.imageOverlay}>
+        <Text style={styles.imageText}>{item.title}</Text>
+        <View style={styles.dateContainer}>
+          <Image source={require('../../../assets/images/drawer/calendar.png')} style={styles.icon} />
+          <Text style={styles.dateText}>{item.date}</Text>
         </View>
+      </View>
+    </ImageBackground>
+  )}
+/>
+          </View>
+        </ScrollView>
       )}
 
-      {selectedSection === 'Photos' && (
-        <View style={styles.dropdownContent}>
-          {/* Content for Photos section */}
-          <Text>Photos Section Content</Text>
-        </View>
-      )}
+      
+{selectedSection === 'Photos' && (
+  <ScrollView style={styles.scrollableContent}>
+    <View style={styles.dropdownContent}>
+      {/* Content for Photos section */}
+      <FlatList
+        data={photoImages}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <View style={styles.photoItem}>
+            <Image source={{ uri: item.image }} style={styles.photoImage} resizeMode="cover" />
+            <Text style={styles.photoText}>{item.name}</Text>
+          </View>
+        )}
+      />
+    </View>
+  </ScrollView>
+)}
 
-      {selectedSection === 'Reviews' && (
-        <View style={styles.dropdownContent}>
-          {/* Content for Reviews section */}
-          <Text>Reviews Section Content</Text>
-        </View>
-      )}
+{selectedSection === 'Reviews' && (
+  <Reviews />
+)}
     </View>
   );
 }
@@ -125,10 +154,69 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1a1a1a', // Set the background color as needed
   },
+  
+  borderBottom: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
+    marginTop: 5,
+  },
+  imageOverlay: {
+    flex: 1,
+    justifyContent: 'left',
+    padding: 15,
+  },
+  photoItem: {
+    flex: 1,
+    margin: 8,
+  },
+  photoImage: {
+    width: '100%',
+    height: 200,  // Adjust the height as needed
+    borderRadius: 20,
+    marginBottom: 8,
+    resizeMode: 'cover',  // Maintain aspect ratio
+  },
+  photoText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  dateText: {
+    color: '#ffffff',
+    fontSize: 14,
+    marginLeft: 5,
+  },
+
+  imageText: {
+    color: 'white',
+    fontSize: 20,
+  },
   ratingContainer: {
     alignItems: 'center',
     marginTop: 20,
     
+  },
+  icon: {
+    width: 20, // Adjust the width as needed
+    height: 20, // Adjust the height as needed
+    tintColor: 'white', // Adjust the icon color as needed
+  },
+
+  imageScrollView: {
+    marginTop: 15,
+  },
+  eventImage: {
+    width: '100%',
+    height: 100,
+    marginRight: 10,
+    borderRadius: 5,
+    marginBottom: 15,
+    
+     // For Android
   },
   profileImage: {
     width: '100%',
@@ -181,7 +269,7 @@ const styles = StyleSheet.create({
   },
   statTitle: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 17,
   },
   statValue: {
     color: '#ffffff',
@@ -200,7 +288,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   dropdownContent: {
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    
     padding: 15,
     marginTop: 10,
   },
@@ -225,11 +313,12 @@ const styles = StyleSheet.create({
 
   sectionButtonText: {
     color: 'grey',
-    fontSize: 16, // Adjust the font size as needed
+    fontSize: 18,
+    fontWeight:'bold', // Adjust the font size as needed
   },
   selectedSectionButtonText: {
     color: 'red', // Change the color to red when selected
-    fontSize: 16, // Adjust the font size as needed
+    fontSize: 18, // Adjust the font size as needed
   },
   
 });

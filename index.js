@@ -2,6 +2,7 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import { initializeApp } from '@react-native-firebase/app';
+import { getDatabase } from '@react-native-firebase/database';
 
 import auth from '@react-native-firebase/auth';
 const firebaseConfig = {
@@ -15,6 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+const database = getDatabase(firebaseApp);
 
 // Check if the initialization is successful
 if (firebaseApp) {

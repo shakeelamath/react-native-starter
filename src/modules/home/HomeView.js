@@ -182,7 +182,7 @@ const HomeScreen = () => {
         {/* Add your tab content here */}
         <ScrollView style={styles.scrollView}>
         <View style={styles.tabContent}>
-        <Text style={styles.tabContentHeading}>Genres</Text>
+        <Text style={styles.tabContentHeading}>Upcoming Events</Text>
     <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
     <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
     <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
