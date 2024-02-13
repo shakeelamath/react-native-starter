@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, TextInput, Image, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Modal } from 'react-native';
 import { initializeApp } from '@react-native-firebase/app';
 import { getDatabase, ref, push, onValue } from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -65,8 +65,13 @@ const Reviews = () => {
         <Text style={styles.leaveReviewText}>Leave a Review</Text>
       </TouchableOpacity>
 
-      {/* Review tab */}
-      {showReviewTab && (
+      {/* Review tab as a Modal */}
+      <Modal
+        transparent
+        animationType="slide"
+        visible={showReviewTab}
+        onRequestClose={closeReviewTab}
+      >
         <View style={styles.reviewTab}>
           <TouchableOpacity style={styles.closeButton} onPress={closeReviewTab}>
             <Text style={styles.closeButtonText}>Close</Text>
@@ -82,7 +87,7 @@ const Reviews = () => {
             <Text style={styles.submitReviewText}>Submit Review</Text>
           </TouchableOpacity>
         </View>
-      )}
+      </Modal>
     </ScrollView>
   );
 };
@@ -117,24 +122,26 @@ const styles = StyleSheet.create({
   reviewTab: {
     position: 'absolute',
     bottom: 0,
-    top:5,
     left: 0,
     right: 0,
     backgroundColor: '#1a1a1a',
     padding: 16,
+    // Set the maximum height to the full height of the screen
   },
   reviewInput: {
-    height: 100,
+    height: 200,
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 8,
     padding: 8,
     color: 'white',
-    textAlignVertical: 'top',  // Align the text to the top
+    textAlignVertical: 'top', 
+    verticalAlign:'middle',
+     // Align the text to the top
   },
   leaveReviewButton: {
     alignSelf: 'center',
-    marginTop: 10,
+    marginTop: 0,
     padding: 20,
     paddingRight:40,
     paddingLeft:40,

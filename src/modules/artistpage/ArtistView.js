@@ -4,6 +4,8 @@ import { AirbnbRating } from 'react-native-ratings';
 import * as Animatable from 'react-native-animatable';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Reviews from './reviews'; 
+import LinearGradient from 'react-native-linear-gradient';
+import { RadialGradient } from 'react-native-gradients';
 export default function ArtistScreen() {
   const artistProfileImageUrl = 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/ArtistImage.png?alt=media&token=4a0fcfd4-4194-485a-9bad-7eca3cd57d1a';
 
@@ -19,6 +21,7 @@ export default function ArtistScreen() {
 
     // Add more objects with different image URLs and titles
   ];
+ 
 
   const photoImages = [
     { image: 'https://firebasestorage.googleapis.com/v0/b/syncup-c2f1d.appspot.com/o/artistphoto.png?alt=media&token=65dd47de-12ad-4071-b5d0-cb920934bfea', name: 'Photo 1' },
@@ -38,6 +41,12 @@ export default function ArtistScreen() {
   const sections = ['Events', 'Photos', 'Reviews'];
 
   return (
+    
+<LinearGradient
+  colors={['#4e4845', '#443e3b', '#3d3937', '#362f2d', '#332f2e', '#2d2824', '#272523', '#201d1a', '#1b1a19']}
+  locations={[0, 0.08, 0.2, 0.4, 0.55, 0.65, 0.75, 0.85, 1]}
+  style={styles.gradient}
+>
     <View style={styles.container}>
       {/* Artist's Profile Picture */}
       <Image style={styles.profileImage} source={{ uri: artistProfileImageUrl }} />
@@ -147,14 +156,23 @@ export default function ArtistScreen() {
   <Reviews />
 )}
     </View>
+    </LinearGradient>
+   
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a', // Set the background color as needed
+  // Set the background color as needed
   },
-  
+  gradientContainer: {
+    flex: 1,
+    overflow: 'hidden', // Clip child views to the bounds of the View
+    borderRadius: 100,  // Adjust the borderRadius to create an oval shape
+  },
+  gradient: {
+    flex: 1,
+  },
   borderBottom: {
     borderBottomWidth: 1,
     borderBottomColor: 'grey',
