@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Image, FlatList } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import BottomTabEvents from "./BottomTabSingle"
 const HomeScreen = () => {
   const initialRegion = {
     latitude: 37.78825,
@@ -164,21 +164,15 @@ const HomeScreen = () => {
       {/* Animated Bottom Tab */}
       <Animated.View style={[styles.bottomTab, tabStyle]}>
         <TouchableOpacity style={styles.tabHeader} onPress={toggleTabHeight}>
-        <Animated.Image
+          <Animated.Image
             source={require('../../../assets/images/icons/arrowupwhite.png')}
             style={[styles.arrowIcon, { transform: [{ rotate: rotateArrow }] }]}
           />
           <Text style={styles.tabHeaderText}>Events Happening Near You</Text>
         </TouchableOpacity>
-        <View style={styles.viewflat}>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          horizontal
-          style={styles.flatList}
-        />
-        </View>
+
+        {/* Use the EventList component */}
+        <BottomTabEvents  />
         {/* Add your tab content here */}
         <ScrollView style={styles.scrollView}>
         <View style={styles.tabContent}>

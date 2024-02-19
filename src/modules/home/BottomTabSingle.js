@@ -53,18 +53,7 @@ const BottomTab = ({ data, selectedMarker }) => {
         {renderCustomContent()}
         </View>
         {/* Add your tab content here */}
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.tabContent}>
-            <Text style={styles.tabContentHeading}>Upcoming Events</Text>
-            <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
-            <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
-            <Image source={require('../../../assets/images/genre.png')} style={styles.additionalImage} />
-            <Text style={styles.cantFindText}>
-              Can't find what you're looking for?{'\n'}
-              <Text style={styles.exploreMoreText}>Explore More</Text>
-            </Text>
-          </View>
-        </ScrollView>
+        
       </Animated.View>
     </View>
   );
