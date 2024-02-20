@@ -39,23 +39,11 @@ const BottomTab = ({ data, selectedMarker }) => {
     </View>
   );
   return (
-    <View style={styles.bottomTabContainer}>
-      {/* Animated Bottom Tab */}
-      <Animated.View style={[styles.bottomTab, tabStyle]}>
-        <TouchableOpacity style={styles.tabHeader} onPress={toggleTabHeight}>
-          <Animated.Image
-            source={require('../../../assets/images/icons/arrowupwhite.png')}
-            style={[styles.arrowIcon, { transform: [{ rotate: rotateArrow }] }]}
-          />
-          <Text style={styles.tabHeaderText}>{selectedMarker ? selectedMarker.title : 'The Love Bar'}</Text>
-        </TouchableOpacity>
+    
         <View style={styles.viewflat}>
         {renderCustomContent()}
         </View>
-        {/* Add your tab content here */}
-        
-      </Animated.View>
-    </View>
+       
   );
 };
 
@@ -72,6 +60,8 @@ const styles = StyleSheet.create({
     viewflat:{
   height:180,
   width:380,
+  marginLeft:15,
+
     },
     titleAboveButton: {
         position: 'absolute',
@@ -88,6 +78,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 15,
         position: 'relative',
+        
       },
       customImage: {
         width: "100%",
@@ -160,15 +151,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 10,
     },
-    tabHeaderText: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      color: 'white', 
-      marginTop: 5,
-      alignSelf: 'flex-start',
-      
-      marginEnd:290,
-    },
+   
     arrowIcon: {
       width: 20,
       height: 20,

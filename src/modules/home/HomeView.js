@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Image, FlatList } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { ScrollView } from 'react-native-gesture-handler';
-import BottomTabEvents from "./BottomTabSingle"
+import BottomTabEvents from "./BottomTabEvents"
+import BottomTabSingle from "./BottomTabSingle"
 const HomeScreen = () => {
   const initialRegion = {
     latitude: 37.78825,
@@ -16,16 +17,11 @@ const HomeScreen = () => {
     { id: '3', source: require('../../../assets/images/home/artist.png'), text: 'Almaz', additionalText: 'Dehiwale' },
   ];
 
-  const renderItem = ({ item }) => (
-    <View style={styles.gridItem}>
-      <Image source={item.source} style={styles.gridImage} />
-      <Text style={styles.gridText}>{item.text}</Text>
-      <Text style={styles.additionalText}>{item.additionalText}</Text>
-    </View>
-  );
+
 
   const [tabHeight, setTabHeight] = useState(new Animated.Value(300));
-  
+  const [currentTab, setCurrentTab] = useState('events');
+  const [markerTitle, setMarkerTitle] = useState('');
 
   const toggleTabHeight = () => {
     const newHeight = tabHeight._value === 300 ? 600 : 300;
@@ -44,111 +40,48 @@ const HomeScreen = () => {
   const tabStyle = {
     height: tabHeight,
   };
-  const customMapStyle = [
-    {
-      "featureType": "all",
-      "elementType": "labels.text.fill",
-      "stylers": [
-        {
-          "color": "#ffffff"
-        }
-      ]
-    },
-    {
-      "featureType": "all",
-      "elementType": "labels.text.stroke",
-      "stylers": [
-        {
-          "color": "#000000"
-        },
-        {
-          "lightness": 13
-        }
-      ]
-    },
-    {
-      "featureType": "administrative",
-      "elementType": "geometry.fill",
-      "stylers": [
-        {
-          "color": "#000000"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative",
-      "elementType": "geometry.stroke",
-      "stylers": [
-        {
-          "color": "#144b53"
-        },
-        {
-          "lightness": 14
-        },
-        {
-          "weight": 1.4
-        }
-      ]
-    },
-    {
-      "featureType": "landscape",
-      "elementType": "all",
-      "stylers": [
-        {
-          "color": "#08304b"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "geometry",
-      "stylers": [
-        {
-          "color": "#0c4152"
-        },
-        {
-          "lightness": 5
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "all",
-      "stylers": [
-        {
-          "color": "#000000"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "all",
-      "stylers": [
-        {
-          "color": "#146474"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "all",
-      "stylers": [
-        {
-          "color": "#021019"
-        }
-      ]
-    }
-  ];
+  const handleMarkerPress = (title) => {
+    setCurrentTab('single');
+    setMarkerTitle(title);
+    toggleTabHeight(); // Optionally close the tab when switching to BottomTabSingle
+  };
+  const Arrow = () => (
+    <Animated.Image
+      source={require('../../../assets/images/icons/arrowupwhite.png')}
+      style={[styles.arrowIcon, { transform: [{ rotate: rotateArrow }] }]}
+    />
+  );
+  
+  const Heading = () => (
+    <Text style={styles.tabHeaderText}>
+      {currentTab === 'events' ? 'Events Happening Near You' : markerTitle}
+    </Text>
+  );
+  
+  const renderTabHeader = () => {
+    return (
+      <TouchableOpacity style={styles.tabHeader} onPress={toggleTabHeight}>
+        <Arrow />
+        <Heading />
+      </TouchableOpacity>
+    );
+  };
+
+  const handleContainerPress = () => {
+    // Reset the current tab to 'events' when the container is pressed
+    setCurrentTab('events');
+    
+  };
+ 
   
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onTouchStart={handleContainerPress}>
       {/* Google Map */}
       <MapView
         style={styles.map}
         initialRegion={initialRegion}
         provider="google"
-        customMapStyle={customMapStyle}
-        showsUserLocation={true}
+                showsUserLocation={true}
         showsMyLocationButton={true}
         showsCompass={true}
         toolbarEnabled={true}
@@ -158,21 +91,26 @@ const HomeScreen = () => {
         onMapReady={() => {}}
       >
         {/* Marker for the initial location */}
-        <Marker coordinate={initialRegion} title="Marker Title" description="Marker Description" />
+        <Marker
+  coordinate={initialRegion}
+  title="Love Bar"  // Updated marker title to "Love Bar"
+  description="Marker Description"
+  onPress={() => handleMarkerPress("Love Bar")}  // Updated handleMarkerPress function with the new title
+/>
+
       </MapView>
 
-      {/* Animated Bottom Tab */}
-      <Animated.View style={[styles.bottomTab, tabStyle]}>
-        <TouchableOpacity style={styles.tabHeader} onPress={toggleTabHeight}>
-          <Animated.Image
-            source={require('../../../assets/images/icons/arrowupwhite.png')}
-            style={[styles.arrowIcon, { transform: [{ rotate: rotateArrow }] }]}
-          />
-          <Text style={styles.tabHeaderText}>Events Happening Near You</Text>
-        </TouchableOpacity>
+     {/* Animated Bottom Tab */}
+     <Animated.View style={[styles.bottomTab, tabStyle]}>
+        {renderTabHeader()}
 
-        {/* Use the EventList component */}
-        <BottomTabEvents  />
+        {/* Conditionally render BottomTabEvents or BottomTabSingle based on the currentTab state */}
+        {currentTab === 'events' ? (
+          <BottomTabEvents data={data} />
+        ) : (
+          <BottomTabSingle markerTitle={markerTitle} />
+        )}
+
         {/* Add your tab content here */}
         <ScrollView style={styles.scrollView}>
         <View style={styles.tabContent}>
@@ -205,7 +143,8 @@ height:180,
     paddingTop:0,
     alignItems: 'center',
     marginBottom: 0,
-    alignSelf: 'flex-start',
+    paddingLeft:25,
+   
   },
   tabContentHeading: {
     fontSize: 24,
@@ -241,28 +180,36 @@ height:180,
     borderTopColor: 'gray',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-    alignItems: 'center',
+   
     
   },
+ 
   tabHeader: {
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+     // Keep center alignment
     padding: 10,
   },
+  
+  tabHeaderTextContainer: {
+    alignSelf: 'flex-start', 
+    marginLeft:-70, // Align the text to the left
+  },
+  
   tabHeaderText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white', 
-    marginTop: 5,
-    alignSelf: 'flex-start',
-    
-    marginEnd:65,
+    color: 'white',
+    marginLeft: 10,
+    alignSelf: 'flex-start', 
+    marginLeft:20, // Adjust margin if needed
   },
   arrowIcon: {
     width: 20,
     height: 20,
     resizeMode: 'contain',
+    justifyContent: 'center',
+    alignItems: 'center', 
+    marginLeft:180,
   },
   gridItem: {
     alignItems: 'center',
