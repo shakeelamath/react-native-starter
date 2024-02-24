@@ -9,6 +9,7 @@ import { initializeApp } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth'; 
 import ArtistScreen from '../artistpage/ArtistView';
 import pages from '../pages/PagesViewContainer'
+import EventScreen from '../eventpage/EventView';
 const NavigatorView = () => {
   const navigation = useNavigation();
 
@@ -66,6 +67,17 @@ const NavigatorView = () => {
        <Stack.Screen
         name="Artist"
         component={ArtistScreen}
+        options={{
+          headerTransparent: true,
+          headerLeft: headerLeftComponentMenu,
+          headerTitleStyle: {
+            color: 'transparent',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Event"
+        component={EventScreen}
         options={{
           headerTransparent: true,
           headerLeft: headerLeftComponentMenu,

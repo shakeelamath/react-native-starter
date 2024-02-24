@@ -16,6 +16,7 @@ import Artist from '../artistpage/ArtistViewContainer';
 import { colors, fonts } from '../../styles';
 import ArtistScreen from '../artistpage/ArtistView';
 import HomeScreen from '../home/HomeView';
+import EventScreen from '../eventpage/EventView';
 
 const headerLeftComponent = (props) => {
   return (
@@ -142,6 +143,17 @@ const StackNavigationData = [
   {
     name: 'Artist',
     component: ArtistScreen,
+    headerLeft: headerLeftComponent,
+    headerBackground: { source: headerBackground },
+    headerTitleStyle: {
+      fontFamily: fonts.primaryRegular,
+      color: 'transparent',
+      fontSize: 18,
+    },
+  },
+  {
+    name: 'Event',
+    component: EventScreen,
     headerLeft: headerLeftComponent,
     headerBackground: { source: headerBackground },
     headerTitleStyle: {

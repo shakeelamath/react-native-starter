@@ -6,7 +6,8 @@ import HomeScreen from '../home/HomeView';
 import LoginViewContainer from '../login/LoginViewContainer';
 import Pages from '../pages/PagesView';
 import { loginSuccess } from '../../redux/actions';
-import Artist from '../artistpage/ArtistViewContainer'
+import Artist from '../artistpage/ArtistViewContainer';
+import Event from '../eventpage/EventViewContainer';
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
@@ -21,6 +22,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Pages" component={Pages} />
       <Stack.Screen name="Artist" component={Artist} />
+      <Stack.Screen namee="Event" component={Event}/>
     </Stack.Navigator>
   );
 }
