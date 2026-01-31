@@ -44,6 +44,7 @@ module.exports = {
 ### 5. Fixed Dependency Conflicts
 - Removed `@react-native-community/cli` (peer dependency conflict with RN 0.73)
 - Switched from yarn to npm for package management
+- Added `postinstall-postinstall` to ensure patches apply correctly after yarn/npm installs
 
 ## Verification Steps
 
@@ -65,13 +66,13 @@ module.exports = {
 
 ## Compatibility Matrix
 
-| Package | Version | Reason |
-|---------|---------|--------|
-| react-native | 0.73.1 | Current version |
-| react-native-reanimated | ~3.6.3 | Compatible with RN 0.73.x |
-| @babel/core | ^7.28.6 | Supports TypeScript 5.0 |
-| TypeScript | 5.0.4 | Modern syntax support |
-| @gorhom/bottom-sheet | ^4.4.0 | Reanimated 3.x compatible |
+| Package | Version | Resolved | Reason |
+|---------|---------|----------|--------|
+| react-native | 0.73.1 | - | Current version |
+| react-native-reanimated | ~3.6.3 | 3.6.3 | Compatible with RN 0.73.x |
+| @babel/core | ^7.23.0 | 7.28.6 | Supports TypeScript 5.0 |
+| TypeScript | 5.0.4 | - | Modern syntax support |
+| @gorhom/bottom-sheet | ^4.4.0 | - | Reanimated 3.x compatible |
 
 ## Common Issues & Solutions
 
