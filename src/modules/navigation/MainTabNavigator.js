@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import HomeScreen from '../home/HomeView';
 import LoginViewContainer from '../login/LoginViewContainer';
@@ -17,7 +17,7 @@ export default function AppNavigator() {
 
 
   return (
-    <Stack.Navigator initialRouteName={initialRoute}>
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Login" component={LoginViewContainer} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Pages" component={Pages} />

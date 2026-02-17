@@ -8,6 +8,7 @@ import {
 import NavigatorView from './RootNavigation';
 
 import AvailableInFullVersion from '../login/LoginViewContainer';
+import auth from '@react-native-firebase/auth';
 
 const iconHome = require('../../../assets/images/drawer/home.png');
 const iconCalendar = require('../../../assets/images/drawer/calendar.png');
@@ -16,51 +17,55 @@ const iconPages = require('../../../assets/images/drawer/pages.png');
 const iconComponents = require('../../../assets/images/drawer/components.png');
 const iconSettings = require('../../../assets/images/drawer/settings.png');
 const iconBlog = require('../../../assets/images/drawer/blog.png')
+const iconProfile = require('../../../assets/images/drawer/user_min.png'); // Use existing icons as safe placeholders. Replace these files later with your own images
+const iconTickets = require('../../../assets/images/drawer/blog.png'); // placeholder
 
+// Keep only the three entries you requested; use calendar for Events and grids for Artists
 const drawerData = [
-  {
-    name: 'Home',
-    icon: iconHome,
-  },
-  {
-    name: 'Calendar',
-    icon: iconCalendar,
-  },
-  {
-    name: 'Grids',
-    icon: iconGrids,
-  },
-  {
-    name: 'Pages',
-    icon: iconPages,
-  },
-  {
-    name: 'Components',
-    icon: iconComponents,
-  },
-  {
-    name: 'Artist',
-    icon: iconComponents,
-  },
-  {
-    name: 'Event',
-    icon: iconComponents,
-  },
+  { name: 'Explore', icon: iconHome, route: 'Home' },
+  { name: 'Events', icon: iconCalendar, route: 'Events' },
+  { name: 'Artists', icon: iconGrids, route: 'Artists' },
 ];
 
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props) {
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const sub = auth().onAuthStateChanged(u => setUser(u));
+    return () => sub && sub();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      props.navigation.closeDrawer();
+      // Reset the navigation state so the app cannot go back into authenticated screens
+      props.navigation.reset({
+        index: 0,
+        routes: [
+          { name: 'Homes', state: { routes: [{ name: 'Login' }] } },
+        ],
+      });
+    } catch (e) {
+      console.warn('Logout failed', e);
+    }
+  };
+
+  const displayName = (user && (user.displayName || (user.providerData && user.providerData[0] && user.providerData[0].displayName))) || 'John Doe';
+  const displayEmail = (user && (user.email || (user.providerData && user.providerData[0] && user.providerData[0].email))) || 'Johndoe@gmail.com';
+  const avatarSource = (user && (user.photoURL || (user.providerData && user.providerData[0] && user.providerData[0].photoURL)))
+    ? { uri: user.photoURL || user.providerData[0].photoURL }
+    : require('../../../assets/images/drawer/user.png');
+
   return (
     <DrawerContentScrollView {...props} style={{padding: 0}}>
       <View style={styles.avatarContainer}>
-        <Image
-          style={styles.avatar}
-          source={require('../../../assets/images/drawer/user.png')}
-        />
+        <Image style={styles.avatar} source={avatarSource} />
         <View style={{ paddingLeft: 15 }}>
-          <Text style={styles.userName}>John Doe</Text>
-          <Text style={{ color: '#4BC1FD' }}>Johndoe@gmail.com</Text>
+          <Text style={styles.userName}>{displayName}</Text>
+          <Text style={{ color: '#4BC1FD' }}>{displayEmail}</Text>
         </View>
       </View>
       <View style={styles.divider} />
@@ -68,43 +73,25 @@ function CustomDrawerContent(props) {
         <DrawerItem
           key={`drawer_item-${idx+1}`}
           label={() => (
-            <View
-              style={styles.menuLabelFlex}>
-              <Image
-                style={{ width: 20, height: 20}}
-                source={item.icon}
-              />
+            <View style={styles.menuLabelFlex}>
+              <Image style={{ width: 20, height: 20}} source={item.icon} />
               <Text style={styles.menuTitle}>{item.name}</Text>
             </View>
           )}
-          onPress={() => props.navigation.navigate(item.name)}
+          onPress={() => props.navigation.navigate(item.route || item.name)}
         />
       ))}
+
       <View style={styles.divider} />
+      {/* Logout button uses a left-arrow glyph so we don't need a new image */}
       <DrawerItem
         label={() => (
           <View style={styles.menuLabelFlex}>
-            <Image
-              style={{ width: 20, height: 20}}
-              source={iconBlog}
-            />
-            <Text style={styles.menuTitle}>Blog</Text>
+            <Text style={styles.arrowGlyph}>←</Text>
+            <Text style={[styles.menuTitle, { color: '#ff6666' }]}>Logout</Text>
           </View>
         )}
-        onPress={() => props.navigation.navigate('Blog')}
-      />
-      <View style={styles.divider} />
-      <DrawerItem
-        label={() => (
-          <View style={styles.menuLabelFlex}>
-            <Image
-              style={{ width: 20, height: 20}}
-              source={iconSettings} 
-            />
-            <Text style={styles.menuTitle}>Settings</Text>
-          </View>
-        )}
-        onPress={() => props.navigation.navigate('Calendar')}
+        onPress={handleLogout}
       />
     </DrawerContentScrollView>
   );
@@ -133,7 +120,14 @@ const styles = StyleSheet.create({
   },
   menuLabelFlex: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  arrowGlyph: {
+    color: '#fff',
+    fontSize: 18,
+    lineHeight: 20,
+    marginRight: 8,
   },
   userName: {
     color: '#fff',

@@ -1,6 +1,9 @@
 export default {
-  primaryLight: 'Lato-Light',
-  primaryRegular: 'Lato-Regular',
-  primaryBold: 'Lato-Bold',
-  primarySemiBold: 'Lato-SemiBold',
+  primaryLight: 'Poppins-Light',
+  primaryRegular: 'Poppins-Regular',
+  primaryBold: 'Poppins-Bold',
+  primarySemiBold: 'Poppins-SemiBold',
+  primary: 'Poppins-Regular',
+  primaryMedium: 'Poppins-Medium',
+  primaryAndroid: 'Poppins',
 };

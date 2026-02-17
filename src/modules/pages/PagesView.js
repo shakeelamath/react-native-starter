@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 
 import { colors, fonts } from '../../styles';
+import GradientBackground from '../../components/GradientBackground';
 
 const chartIcon = require('../../../assets/images/pages/chart.png');
 const calendarIcon = require('../../../assets/images/pages/calendar.png');
@@ -13,7 +14,7 @@ const blogIcon = require('../../../assets/images/pages/blog.png');
 
 export default function PagesScreen(props) {
   return (
-    <View style={styles.container}>
+    <GradientBackground style={styles.container}>
       <View style={styles.row}>
         <TouchableOpacity
           onPress={() => props.navigation.navigate('Charts')}
@@ -99,14 +100,13 @@ export default function PagesScreen(props) {
           <Text style={styles.itemText}>Blog</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
     paddingTop: 10,
   },
   row: {

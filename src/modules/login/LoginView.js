@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { GoogleAuthProvider } from '@react-native-firebase/auth';
-import auth from '@react-native-firebase/auth'; 
+import auth from '@react-native-firebase/auth';
 import { fonts, colors } from '../../styles';
-import { Button } from '../../components';
-import { dispatch, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../redux/actions';
+import GradientBackground from '../../components/GradientBackground';
 
-export default function AvailableInFullVersionScreen(props) {
-  const rnsUrl = 'https://reactnativestarter.com';
-
-  const [selectedRole, setSelectedRole] = useState(null);
+export default function LoginScreen(props) {
+  const [selectedRole, setSelectedRole] = useState('user');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(true);
   const dispatch = useDispatch();
+
   GoogleSignin.configure({
     webClientId: '561706331753-jvgchmrcr3ul6js8hs6i5bpgseqbm6o1.apps.googleusercontent.com',
   });
@@ -25,175 +24,124 @@ export default function AvailableInFullVersionScreen(props) {
       const { idToken } = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       await auth().signInWithCredential(googleCredential);
-      console.log('Navigating to SyncUp screen');
       dispatch(loginSuccess());
-      // Navigate to HomeScreen upon successful sign-in
-      props.navigation.navigate('Home');
+      props.navigation.replace('Home');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('Google Sign-In cancelled');
+        // cancelled
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Google Sign-In in progress');
+        // in progress
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Play services not available or outdated');
+        Alert.alert('Play services not available');
       } else {
         console.error('Google Sign-In Error:', error);
+        Alert.alert('Login failed', error.message || 'Unknown error');
       }
     }
   };
 
-  const handleRoleSelection = (role) => {
-    setSelectedRole(role);
+  const handleEmailLogin = async () => {
+    if (!username || !password) return Alert.alert('Validation', 'Enter username and password');
+    try {
+      await auth().signInWithEmailAndPassword(username, password);
+      dispatch(loginSuccess());
+      // replace so user can't go back to login
+      props.navigation.replace('Home');
+    } catch (e) {
+      console.error('Email login error', e);
+      Alert.alert('Login failed', e.message || 'Unable to sign in');
+    }
   };
 
-  const renderRoleButton = (role, label) => (
-    <TouchableOpacity
-      style={[styles.roleButton, selectedRole === role && styles.selectedRole]}
-      onPress={() => handleRoleSelection(role)}
-    >
-      <Text style={[styles.roleButtonText, selectedRole === role && styles.selectedRoleText]}>
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <View style={styles.container}>
-      <Image source={require('../../../assets/images/syncupLogo.png')} style={styles.nerdImage} />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <GradientBackground style={styles.screen}>
+        <View style={styles.card}>
+          <Image source={require('../../../assets/images/syncupLogo.png')} style={styles.logo} />
 
-      <View style={styles.roleContainer}>
-        {renderRoleButton('vendor', 'Vendor')}
-        {renderRoleButton('entertainer', 'Entertainer')}
-        {renderRoleButton('user', 'User')}
-      </View>
+          <View style={styles.roleRow}>
+            <TouchableOpacity style={[styles.rolePill, selectedRole === 'user' && styles.rolePillActive]} onPress={() => setSelectedRole('user')}>
+              <Text style={[styles.roleText, selectedRole === 'user' && styles.roleTextActive]}>User</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.rolePill, selectedRole === 'entertainer' && styles.rolePillActive]} onPress={() => setSelectedRole('entertainer')}>
+              <Text style={[styles.roleText, selectedRole === 'entertainer' && styles.roleTextActive]}>Entertainer</Text>
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
+          <View style={styles.field}>
+            <Text style={styles.label}>Username</Text>
+            <TextInput value={username} onChangeText={setUsername} placeholder="Enter your username" style={styles.input} autoCapitalize="none" placeholderTextColor="#bbb" />
+          </View>
 
-      <View style={styles.buttonsContainer}>
-        <Button
-          large
-          secondary
-          rounded
-          style={styles.button}
-          caption="Submit"
-          onPress={() => console.log('Submit button pressed')}
-        />
+          <View style={styles.field}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput value={password} onChangeText={setPassword} placeholder="Enter your password" secureTextEntry style={styles.input} placeholderTextColor="#bbb" />
+          </View>
 
-        <Button
-          large
-          bordered
-          rounded
-          style={styles.button}
-          caption="Later"
-          onPress={() => props.navigation.goBack()}
-        />
+          <View style={styles.rowBetween}>
+            <TouchableOpacity style={styles.rememberRow} onPress={() => setRemember(!remember)}>
+              <View style={[styles.checkbox, remember && styles.checkboxChecked]} />
+              <Text style={styles.rememberText}>Remember Me</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => props.navigation.navigate('ForgotPassword') }>
+              <Text style={styles.forgotText}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* Google Sign-In button */}
-        <Button
-          large
-          secondary
-          rounded
-          style={styles.button}
-          caption="Sign In with Google"
-          onPress={handleGoogleSignIn}
-        />
-      </View>
-    </View>
+          <TouchableOpacity style={styles.loginButton} onPress={handleEmailLogin}>
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
+
+          <View style={styles.dividerRow}>
+            <View style={styles.line} />
+            <Text style={styles.orText}> Or With </Text>
+            <View style={styles.line} />
+          </View>
+
+          <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn}>
+            <Image source={require('../../../assets/images/googlelogo.png')} style={styles.googleIcon} />
+            <Text style={styles.googleText}>Login with Google</Text>
+          </TouchableOpacity>
+
+          <View style={styles.signUpRow}>
+            <Text style={styles.signUpText}>Don't have an account ? </Text>
+            <TouchableOpacity onPress={() => props.navigation.navigate('SignUp')}>
+              <Text style={styles.signUpLink}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </GradientBackground>
+    </TouchableWithoutFeedback>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    paddingHorizontal: 30,
-    paddingTop: 40,
-    paddingBottom: 20,
-    
-  },
-  nerdImage: {
-    width: 100,
-    height: 100,
-    
-  },
-  availableText: {
-    color: colors.black,
-    fontFamily: fonts.primaryRegular,
-    fontSize: 40,
-    marginVertical: 3,
-  },
-  textContainer: {
-    alignItems: 'center',
-  },
-  roleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 60,
 
-  },
-  roleButton: {
-    flex: 1,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 12,
-    borderColor: colors.black,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 7, 
-    
-  },
-  selectedRole: {
-    backgroundColor: '#d61616',
-    color: 'white',
-  },
-  roleButtonText: {
-    color: colors.black,
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  selectedRoleText: {
-    color: 'white',
-  },
-  buttonsContainer: {
-    alignItems: 'center',
-    alignSelf: 'stretch',
-  },
-  button: {
-    alignSelf: 'stretch',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    alignSelf: 'stretch',
-    marginHorizontal: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: colors.black,
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 15,
-    paddingLeft: 10,
-  },
-  buttonsContainer: {
-    alignItems: 'center',
-    alignSelf: 'stretch',
-  },
-  button: {
-    alignSelf: 'stretch',
-    marginBottom: 20,
-  },
+const styles = StyleSheet.create({
+  screen: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  card: { width: '90%', backgroundColor: 'transparent', paddingTop: 36, paddingHorizontal: 24, alignSelf: 'center' },
+  logo: { width: 140, height: 140, marginBottom: 18, resizeMode: 'contain', alignSelf: 'center' },
+  roleRow: { flexDirection: 'row', justifyContent: 'center', marginBottom: 12 },
+  rolePill: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 20, marginHorizontal: 6, backgroundColor: 'rgba(255,255,255,0.04)' },
+  rolePillActive: { backgroundColor: 'rgba(198,40,40,0.95)' },
+  roleText: { color: '#ddd' },
+  roleTextActive: { color: '#fff', fontWeight: '700' },
+  field: { width: '100%', marginTop: 8 },
+  label: { color: '#ddd', marginBottom: 6 },
+  input: { backgroundColor: 'rgba(255,255,255,0.06)', color: '#fff', paddingHorizontal: 14, paddingVertical: 12, borderRadius: 28 },
+  rowBetween: { width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6, marginBottom: 14 },
+  rememberRow: { flexDirection: 'row', alignItems: 'center' },
+  checkbox: { width: 18, height: 18, borderWidth: 1, borderColor: '#ccc', borderRadius: 4, marginRight: 8 },
+  checkboxChecked: { backgroundColor: '#c62828', borderColor: '#c62828' },
+  rememberText: { color: '#ddd' },
+  forgotText: { color: '#ff8a80', fontWeight: '700' },
+  loginButton: { backgroundColor: '#c62828', borderRadius: 28, paddingVertical: 14, paddingHorizontal: 30, width: '100%', alignItems: 'center', marginTop: 6 },
+  loginButtonText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  dividerRow: { flexDirection: 'row', alignItems: 'center', width: '100%', marginVertical: 18 },
+  line: { flex: 1, height: 1, backgroundColor: 'rgba(255,255,255,0.06)' },
+  orText: { marginHorizontal: 12, color: '#bbb' },
+  googleButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.28)', paddingVertical: 12, paddingHorizontal: 18, borderRadius: 8, width: '100%', justifyContent: 'center' },
+  googleIcon: { width: 20, height: 20, marginRight: 10 },
+  googleText: { color: '#fff', fontWeight: '700' },
+  signUpRow: { flexDirection: 'row', marginTop: 14, justifyContent: 'center' },
+  signUpText: { color: '#ccc' },
+  signUpLink: { color: '#ff8a80', fontWeight: '700' },
 });

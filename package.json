@@ -6,7 +6,7 @@
     "deprecated-react-native-listview": "0.0.7"
   },
   "scripts": {
-    "start": "react-native start",
+    "start": "node node_modules/react-native/local-cli/cli.js start --watchFolders . --projectRoot . --host 127.0.0.1 --port 8081",
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",

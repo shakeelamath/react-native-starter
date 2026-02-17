@@ -17,6 +17,10 @@ import { colors, fonts } from '../../styles';
 import ArtistScreen from '../artistpage/ArtistView';
 import HomeScreen from '../home/HomeView';
 import EventScreen from '../eventpage/EventView';
+import CreateEventScreen from '../vendor/CreateEventScreen';
+import VendorLogin from '../vendor/VendorLogin';
+import VendorSignup from '../vendor/VendorSignup';
+import VendorDashboard from '../vendor/VendorDashboard';
 
 const headerLeftComponent = (props) => {
   return (
@@ -154,6 +158,50 @@ const StackNavigationData = [
   {
     name: 'Event',
     component: EventScreen,
+    headerLeft: headerLeftComponent,
+    headerBackground: { source: headerBackground },
+    headerTitleStyle: {
+      fontFamily: fonts.primaryRegular,
+      color: 'transparent',
+      fontSize: 18,
+    },
+  },
+  {
+    name: 'VendorLogin',
+    component: VendorLogin,
+    headerLeft: headerLeftComponent,
+    headerBackground: { source: headerBackground },
+    headerTitleStyle: {
+      fontFamily: fonts.primaryRegular,
+      color: 'transparent',
+      fontSize: 18,
+    },
+  },
+  {
+    name: 'VendorSignup',
+    component: VendorSignup,
+    headerLeft: headerLeftComponent,
+    headerBackground: { source: headerBackground },
+    headerTitleStyle: {
+      fontFamily: fonts.primaryRegular,
+      color: 'transparent',
+      fontSize: 18,
+    },
+  },
+  {
+    name: 'VendorDashboard',
+    component: VendorDashboard,
+    headerLeft: headerLeftComponent,
+    headerBackground: { source: headerBackground },
+    headerTitleStyle: {
+      fontFamily: fonts.primaryRegular,
+      color: 'transparent',
+      fontSize: 18,
+    },
+  },
+  {
+    name: 'CreateEvent',
+    component: CreateEventScreen,
     headerLeft: headerLeftComponent,
     headerBackground: { source: headerBackground },
     headerTitleStyle: {

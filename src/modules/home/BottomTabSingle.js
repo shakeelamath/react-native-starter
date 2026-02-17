@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Image, FlatList, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import upcoming from './upcomingEvents';
 
-const BottomTab = ({ data, selectedMarker }) => {
+const BottomTab = ({ data, selectedMarker, selectedEvent = null }) => {
     const [tabHeight, setTabHeight] = useState(new Animated.Value(300));
   const toggleTabHeight = () => {
     const newHeight = tabHeight._value === 300 ? 600 : 300;
@@ -29,11 +31,21 @@ const BottomTab = ({ data, selectedMarker }) => {
       <Text style={styles.additionalText}>{item.additionalText}</Text>
     </View>
   );
+  const navigation = useNavigation();
+
+  // Choose an event to open: prefer selectedEvent (from marker), else prefer 'ladies' in upcoming, else first upcoming
+  const eventToOpen = selectedEvent || upcoming.find(ev => ev.name && ev.name.toLowerCase().includes('ladies')) || upcoming[0] || null;
+
   const renderCustomContent = () => (
     <View style={styles.customContentContainer}>
-      <Image source={require('../../../assets/images/singletabevent.png')} style={styles.customImage} />
-      <Text style={styles.titleAboveButton}>Ladies Night</Text>
-      <TouchableOpacity style={styles.customButton} onPress={() => console.log('Button Pressed')}>
+      <Image source={ eventToOpen && eventToOpen.image ? eventToOpen.image : require('../../../assets/images/singletabevent.png') } style={styles.customImage} />
+      <Text style={styles.titleAboveButton}>{(eventToOpen && eventToOpen.name) || 'Ladies Night'}</Text>
+      <TouchableOpacity
+        style={styles.customButton}
+        onPress={() => {
+          if (eventToOpen) navigation.navigate('Event', { event: eventToOpen });
+        }}
+      >
         <Text style={styles.buttonText}>See More</Text>
       </TouchableOpacity>
     </View>
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
       bottom: 0,
       left: 0,
       right: 0,
-      backgroundColor: '#1a1a1a',
+      backgroundColor: 'transparent',
       borderTopWidth: 0,
       borderTopColor: 'gray',
       borderTopRightRadius: 15,
