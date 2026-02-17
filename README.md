@@ -50,6 +50,10 @@ yarn run:android
 
 That's it! Cool, right?
 
+### Troubleshooting
+
+If you encounter "Could not connect to development server" error on Android, please refer to our [Metro Connection Fix Guide](METRO_CONNECTION_FIX.md).
+
 ## Documentation
 
 Our handy documentation can be found on official RNS website: https://docs.reactnativestarter.com 
